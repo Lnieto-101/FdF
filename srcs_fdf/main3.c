@@ -1,8 +1,11 @@
-#include "mlx.h"
-#include "libft.h"
+#include "../includes_fdf/mlx.h"
+#include "../libft/includes/libft.h"
 #include "stdio.h"
 #include "unistd.h"
 #include <math.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 typedef struct  s_point
 {
@@ -202,7 +205,7 @@ int    get_key(int keycode, void *mlx_ptr, void *win_ptr, void *img_ptr)
 	static void *img = (void *)-1;
 	static void *win = (void *)-1;
 	static void *mlx = (void *)-1;
-	
+
 	if (mlx == (void *)-1)
 		mlx = mlx_ptr;
 	if (win == (void *)-1)
@@ -258,7 +261,7 @@ point         *read_map(char *map, int *j)
         if (!(co = malloc(sizeof(point) * *j + 1)))
             return (NULL);
     fd = open(map, O_RDONLY);
-    while (get_next_line(fd, &line) > 0)
+    while (ft_get_next_line(fd, &line) > 0)
     {
         split = ft_strsplit(line, ' ');
         x = 0;
@@ -307,7 +310,7 @@ int     main(int ac, char **av)
 	int		y_screen;
 	int		x2_screen;
 	int		dz;
-	int		dz2;	
+	int		dz2;
 	int		y2_screen;
 	int		j;
 	int		color;
@@ -343,7 +346,7 @@ int     main(int ac, char **av)
 		dz2 = (coord[o].z / 1) * 1/sqrt(1);
 		half_width = 1500 / 2;
 		half_height = 1500 / 2;
-		
+
 		x_screen = (((dx - (dz / sqrt(2)))));
 		y_screen = (((dx + 2 * dy + dz) / sqrt(6) + half_height));
 		x2_screen = (((dx2 - (dz2 / sqrt(2)))));
