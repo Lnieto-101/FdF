@@ -6,7 +6,7 @@
 /*   By: vasalome <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/04 14:32:35 by vasalome     #+#   ##    ##    #+#       */
-/*   Updated: 2018/12/07 15:36:15 by vasalome    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/12/10 15:41:28 by vasalome    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
+# include <fcntl.h>
 
 size_t				ft_strlen(const char *str);
 char				*ft_strdup(const char *src);

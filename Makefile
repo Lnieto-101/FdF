@@ -6,7 +6,7 @@
 #    By: vasalome <vasalome@student.le-101.fr>      +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/11/26 17:27:09 by vasalome     #+#   ##    ##    #+#        #
-#    Updated: 2018/12/05 15:23:19 by vasalome    ###    #+. /#+    ###.fr      #
+#    Updated: 2018/12/10 16:22:55 by vasalome    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -21,6 +21,7 @@ NAME		=	fdf
 #	Compiler:
 CC			=	gcc
 CFLAGS		=	-Wall -Wextra -Werror
+MEMFLAGS	=	-ggdb -fsanitize=address
 
 #	Directory:
 SRCS_DIR	=	./srcs_fdf/
@@ -28,7 +29,7 @@ OBJ_DIR		=	./objs_fdf/
 INC_DIR		=	./includes_fdf/
 
 #	Sources:
-SRCS		=	main3.c
+SRCS		=	main4.c
 #SRCS		+=	ft_
 
 #	Objects:
@@ -71,7 +72,7 @@ R_UNDERLINE	=	\033[24m
 $(OBJ_DIR)%.o:$(SRCS_DIR)%.c $(INC_DIR)*.h
 	@printf "$(_ORANGE)[CC] $(<:.c=)...$(_STOP)"
 #	@$(CC) $(CFLAGS) $(INC) -c $< -o $@
-#	@$(CC) $(INC) -c $< -o $@ #A MODIFIER
+	@$(CC) $(INC) -c $< -o $@ #A MODIFIER
 	@printf "\r                                             \r"
 
 all:
@@ -90,8 +91,9 @@ make_mlx:
 $(NAME): $(OBJ) $(INC_DIR) make_libft make_mlx
 	@echo "$(_ORANGE)$(UNDERLINE)FDF:$(R_UNDERLINE)$(_STOP)		$(BOLD)COMPILATION $(NAME): IN PROGRESS..$(_STOP)\n"
 #	@$(CC) $(CFLAGS) $(OBJ) -L./libft/ -lft -L./libmlxji/ -lmlxji -L ./minilibx/ -I ./minilibx/ -lmlx -framework OpenGL -framework AppKit -o $(NAME) #A MODIFIER
-#	@gcc ./srcs_fdf/main3.c ./minilibx_macos/libmlx.a ./libft/libft.a -framework OpenGL -framework AppKit -I libft/includes $(INC) #EN ATTENDANT
-	@echo "$(_ORANGE)| ->		$(NAME):$(BLINK)100%\n$(R_BLINK)$(_STOP)"
+	@gcc $(MEMFLAGS) ./srcs_fdf/main4.c ./minilibx_macos/libmlx.a ./libft/libft.a -framework OpenGL -framework AppKit -I libft/includes $(INC) -o $(NAME) #EN ATTENDANT
+	@echo "$(_ORANGE)| ->		$(NAME):" "$(_STOP)|\033[42m     $(BOLD)L O A D I N G$(R_BOLD)     $(_STOP)|" | pv -qL 15
+	@echo "		$(_ORANGE)$(BLINK)100%\n$(R_BLINK)$(_STOP)"
 	@sleep 1.5
 	@clear
 	@echo "\n	$(_ORANGE)------------------------------------------------------------------"

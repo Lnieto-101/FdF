@@ -6,13 +6,13 @@
 /*   By: lnieto <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/14 14:01:54 by lnieto       #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/21 10:23:14 by lnieto      ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/12/10 15:43:27 by vasalome    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "mlx.h"
-#include "libft.h"
+#include "../includes_fdf/mlx.h"
+#include "../libft/includes/libft.h"
 #include <math.h>
 #include <stdio.h>
 
@@ -180,7 +180,7 @@ int     read_map(vars *all)
     if (all->max_p != 0)
         malloc_coord(all);
     fd = open(all->map_name, O_RDONLY);
-    while (get_next_line(fd, &line) > 0)
+    while (ft_get_next_line(fd, &line) > 0)
     {
         split = ft_strsplit(line, ' ');
         tab[0] = 0;
