@@ -6,7 +6,7 @@
 #    By: vasalome <vasalome@student.le-101.fr>      +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/11/26 17:27:09 by vasalome     #+#   ##    ##    #+#        #
-#    Updated: 2018/12/10 16:22:55 by vasalome    ###    #+. /#+    ###.fr      #
+#    Updated: 2018/12/10 18:31:49 by vasalome    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -115,7 +115,7 @@ clean:
 
 fclean: clean
 	@echo "$(_ORANGE)$(UNDERLINE)FDF:$(R_UNDERLINE)$(_STOP)		$(BOLD)FCLEAN: IN PROGRESS..$(_STOP)\n		DELETING EXEC || ->\n"
-	@$(RM) $(NAME) a.out
+	@$(RM_DIR) $(NAME) a.out fdf.dSYM
 	@$(MAKE) fclean -C libft/
 	@echo "$(_ORANGE)| ->		FCLEAN: DONE\n$(_STOP)"
 
