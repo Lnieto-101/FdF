@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   main.c                                           .::    .:/ .      .::   */
+/*   main4.c                                          .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: lnieto <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
+/*   By: lnieto <lnieto@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/14 14:01:54 by lnieto       #+#   ##    ##    #+#       */
-/*   Updated: 2018/12/12 10:30:16 by lnieto      ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/12/12 16:49:08 by lnieto      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -49,6 +49,7 @@ typedef struct      s_vars
         int     len_line;
         int     zoom;
 		int 	high;
+        int     k;
 
 }                       vars;
 
@@ -87,7 +88,7 @@ int     make_windows(vars *all)
     }
     mlx_string_put(all->mlx_ptr, all->win_ptr, 525, 60, 0xffffff, "FdF Lnieto/Vasalome");
     return (0);
-}
+}  
 
 int     move_img(int dir, vars *all)
 {
@@ -120,17 +121,17 @@ int     get_key(int keycode, vars *all)
     }
 	else if (keycode == 67)
 	{
-		all2->high += 1;
-		draw_image(all2);
+	    all2->high += 1;
+	    draw_image(all2);
         move_img(0, all2);
 	}
-    else if (keycode == 75)
+    else if (keycode == 75 && all2->high > 1)
 	{
 	    all2->high -= 1;
         draw_image(all2);
         move_img(0, all2);
 	}
-    else if (keycode == 78)
+    else if (keycode == 78 && all2->zoom > 1)
 	{
 		all2->zoom -= 1;
 		draw_image(all2);
@@ -401,7 +402,7 @@ int     calc_x(int x, int z, int zoom)
     dx = x;
     dz = z;
     x1 = (dx - (dz / sqrt(2))) * zoom;
-    return (x1);
+    return (x1 + 625);
 }
 
 int     calc_y(int y, int z, int x, int zoom, int high)
@@ -415,17 +416,14 @@ int     calc_y(int y, int z, int x, int zoom, int high)
     dy = y / high;
     dz = z;
     y1 = ((dx + 2 * dy + dz) / sqrt(6)) * zoom;
-    return (y1 + 1000);
+    return (y1 + 625);
 }
 
 int     calc_point(vars *all)
 {
     int     x1;
     int     y1;
-    static int     k = -1;
 
-    if (k == -1)
-        k = all->len_line;
     if (all->index >= all->max_p)
         return (0);
     all->x1 = calc_x(all->x[all->index], all->z[all->index], all->zoom);
@@ -433,16 +431,12 @@ int     calc_point(vars *all)
     x1 = all->x1;
     y1 = all->y1;
     //printf("%d %d\n\n", all->x1, all->y1);
-    if (all->index + 1 < k)
+    if (all->index < (all->k - 1) || all->index < all->len_line - 1)
     {
         all->x2 = calc_x(all->x[all->index + 1], all->z[all->index + 1], all->zoom);
         all->y2 = calc_y(all->y[all->index + 1], all->z[all->index + 1], all->x[all->index + 1], all->zoom, all->high);
         print_pixel(all);
-    }
-    else
-    {
-        k += all->len_line;
-    }
+    } 
     if (all->index + all->len_line <= all->max_p)
     {
         all->x1 = x1;
@@ -450,6 +444,10 @@ int     calc_point(vars *all)
         all->x2 = calc_x(all->x[all->index + all->len_line], all->z[all->index + all->len_line], all->zoom);
         all->y2 = calc_y(all->y[all->index + all->len_line], all->z[all->index + all->len_line], all->x[all->index + all->len_line], all->zoom, all->high);
         print_pixel(all);
+    }
+    if (all->index >= all->k - 1)
+    {
+        all->k += all->len_line;
     }
     return (0);
 }
@@ -475,7 +473,7 @@ int     draw_image(vars *all)
 
     k = 0;
 	mlx_clear_window(all->mlx_ptr, all->win_ptr);
-	if (all->img_ptr)
+    if (all->img_ptr)
         mlx_destroy_image(all->mlx_ptr, all->img_ptr);
     all->img_ptr = mlx_new_image(all->mlx_ptr, 2000, 2000);
     all->max_p = 0;
@@ -483,6 +481,9 @@ int     draw_image(vars *all)
 	all->index = 0;
 	all->x1 = 0;
 	all->y1 = 0;
+    all->x2 = 0;
+    all->y2 = 0;
+    all->k = all->len_line;
     read_map(all);
     all->img_string = mlx_get_data_addr(all->img_ptr, &all->bits, &all->size_line, &all->endian);
     mlx_put_image_to_window(all->mlx_ptr, all->win_ptr, all->img_ptr, 0, 0);

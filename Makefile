@@ -3,10 +3,10 @@
 #                                                               /              #
 #    Makefile                                         .::    .:/ .      .::    #
 #                                                  +:+:+   +:    +:  +:+:+     #
-#    By: vasalome <vasalome@student.le-101.fr>      +:+   +:    +:    +:+      #
+#    By: lnieto <lnieto@student.le-101.fr>          +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/11/26 17:27:09 by vasalome     #+#   ##    ##    #+#        #
-#    Updated: 2018/12/10 18:31:49 by vasalome    ###    #+. /#+    ###.fr      #
+#    Updated: 2018/12/12 16:21:35 by lnieto      ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -83,12 +83,12 @@ all:
 make_libft:
 	@make -C libft/
 
-make_mlx:
-	@echo "$(_ORANGE)$(UNDERLINE)MLX:$(R_UNDERLINE)$(_STOP)		$(BOLD)LIB IN PROGRESS..$(_STOP)\n"
+#make_mlx:
+#	@echo "$(_ORANGE)$(UNDERLINE)MLX:$(R_UNDERLINE)$(_STOP)		$(BOLD)LIB IN PROGRESS..$(_STOP)\n"
 #	@make re -C minilibx_macos/
-	@echo "\n"
+#	@echo "\n"
 
-$(NAME): $(OBJ) $(INC_DIR) make_libft make_mlx
+$(NAME): $(OBJ) $(INC_DIR) make_libft #make_mlx
 	@echo "$(_ORANGE)$(UNDERLINE)FDF:$(R_UNDERLINE)$(_STOP)		$(BOLD)COMPILATION $(NAME): IN PROGRESS..$(_STOP)\n"
 #	@$(CC) $(CFLAGS) $(OBJ) -L./libft/ -lft -L./libmlxji/ -lmlxji -L ./minilibx/ -I ./minilibx/ -lmlx -framework OpenGL -framework AppKit -o $(NAME) #A MODIFIER
 	@gcc $(MEMFLAGS) ./srcs_fdf/main4.c ./minilibx_macos/libmlx.a ./libft/libft.a -framework OpenGL -framework AppKit -I libft/includes $(INC) -o $(NAME) #EN ATTENDANT
@@ -115,7 +115,7 @@ clean:
 
 fclean: clean
 	@echo "$(_ORANGE)$(UNDERLINE)FDF:$(R_UNDERLINE)$(_STOP)		$(BOLD)FCLEAN: IN PROGRESS..$(_STOP)\n		DELETING EXEC || ->\n"
-	@$(RM_DIR) $(NAME) a.out fdf.dSYM
+	@$(RM_DIR) $(NAME) a.out fdf.dSYM a.out.dSYM
 	@$(MAKE) fclean -C libft/
 	@echo "$(_ORANGE)| ->		FCLEAN: DONE\n$(_STOP)"
 

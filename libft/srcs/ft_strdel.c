@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   get_next_line.h                                  .::    .:/ .      .::   */
+/*   ft_strdel.c                                      .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: lnieto <lnieto@student.le-101.fr>          +:+   +:    +:    +:+     */
+/*   By: lnieto <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/10/25 12:19:45 by vasalome     #+#   ##    ##    #+#       */
-/*   Updated: 2018/12/12 16:50:36 by lnieto      ###    #+. /#+    ###.fr     */
+/*   Created: 2018/10/08 10:33:31 by lnieto       #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/11 14:44:51 by lnieto      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "libft.h"
 
-# include "libft.h"
-
-# define BUFF_SIZE 1000
-
-typedef struct		s_gnl
+void	ft_strdel(char **as)
 {
-	char			*text;
-	char			*tempo;
-	struct s_gnl	*next;
-	int				fd;
-}					t_gnl;
-
-#endif
+	if (as)
+	{
+		free(*as);
+		*as = NULL;
+	}
+}
