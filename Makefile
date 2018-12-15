@@ -6,7 +6,7 @@
 #    By: lnieto <lnieto@student.le-101.fr>          +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/11/26 17:27:09 by vasalome     #+#   ##    ##    #+#        #
-#    Updated: 2018/12/12 16:21:35 by lnieto      ###    #+. /#+    ###.fr      #
+#    Updated: 2018/12/14 14:47:50 by lnieto      ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -92,20 +92,20 @@ $(NAME): $(OBJ) $(INC_DIR) make_libft #make_mlx
 	@echo "$(_ORANGE)$(UNDERLINE)FDF:$(R_UNDERLINE)$(_STOP)		$(BOLD)COMPILATION $(NAME): IN PROGRESS..$(_STOP)\n"
 #	@$(CC) $(CFLAGS) $(OBJ) -L./libft/ -lft -L./libmlxji/ -lmlxji -L ./minilibx/ -I ./minilibx/ -lmlx -framework OpenGL -framework AppKit -o $(NAME) #A MODIFIER
 	@gcc $(MEMFLAGS) ./srcs_fdf/main4.c ./minilibx_macos/libmlx.a ./libft/libft.a -framework OpenGL -framework AppKit -I libft/includes $(INC) -o $(NAME) #EN ATTENDANT
-	@echo "$(_ORANGE)| ->		$(NAME):" "$(_STOP)|\033[42m     $(BOLD)L O A D I N G$(R_BOLD)     $(_STOP)|" | pv -qL 15
+	@echo "$(_ORANGE)| ->		$(NAME):" "$(_STOP)|\033[42m     $(BOLD)L O A D I N G$(R_BOLD)     $(_STOP)|" #| pv -qL 15
 	@echo "		$(_ORANGE)$(BLINK)100%\n$(R_BLINK)$(_STOP)"
-	@sleep 1.5
-	@clear
-	@echo "\n	$(_ORANGE)------------------------------------------------------------------"
-	@echo "	|>								<|"
-	@echo "	|>	     _/\/\/\/\/\/\__/\/\/\/\/\____/\/\/\/\/\/\_		<|"
-	@echo "	|>	    _/\/\__________/\/\____/\/\__/\/\_________ 		<|"
-	@echo "	|>	   _/\/\/\/\/\____/\/\____/\/\__/\/\/\/\/\___  		<|"
-	@echo "	|>	  _/\/\__________/\/\____/\/\__/\/\_________   		<|"
-	@echo "	|>	 _/\/\__________/\/\/\/\/\____/\/\_________    		<|"
+#	@sleep 1.5
+#	@clear
+#	@echo "\n	$(_ORANGE)------------------------------------------------------------------"
+#	@echo "	|>								<|"
+#	@echo "	|>	     _/\/\/\/\/\/\__/\/\/\/\/\____/\/\/\/\/\/\_		<|"
+#	@echo "	|>	    _/\/\__________/\/\____/\/\__/\/\_________ 		<|"
+#	@echo "	|>	   _/\/\/\/\/\____/\/\____/\/\__/\/\/\/\/\___  		<|"
+#	@echo "	|>	  _/\/\__________/\/\____/\/\__/\/\_________   		<|"
+#	@echo "	|>	 _/\/\__________/\/\/\/\/\____/\/\_________    		<|"
 	@echo "	|>	_________________________________$(_STOP)$(BLINK)$(_YELLOW)is ready$(R_BLINK)$(_ORANGE)_		<|"
-	@echo "	|>								<|"
-	@echo "	-----------------------------------------------------------------$(_STOP)\n"
+#	@echo "	|>								<|"
+#	@echo "	-----------------------------------------------------------------$(_STOP)\n"
 
 clean:
 	@echo "$(_ORANGE)$(UNDERLINE)FDF:$(R_UNDERLINE)$(_STOP)		$(BOLD)CLEAN: IN PROGRESS..$(_STOP)\n		DELETING OBJECTS || ->\n"
