@@ -4,4 +4,4 @@ gcc main3.c minilibx_macos/libmlx.a libft/libft.a -framework OpenGL -framework A
 
 Notes pour une vraie loading bar :
 https://code.i-harness.com/fr/q/6e355
-https://insiders.liveshare.vsengsaas.visualstudio.com/join?3DC085B296BC8592502B95BD05201F9695BF
+https://insiders.liveshare.vsengsaas.visualstudio.com/join?CB18E477982825388028721DABC9AC2FAA03
