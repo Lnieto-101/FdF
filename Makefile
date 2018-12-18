@@ -3,10 +3,10 @@
 #                                                               /              #
 #    Makefile                                         .::    .:/ .      .::    #
 #                                                  +:+:+   +:    +:  +:+:+     #
-#    By: lnieto <lnieto@student.le-101.fr>          +:+   +:    +:    +:+      #
+#    By: vasalome <vasalome@student.le-101.fr>      +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/11/26 17:27:09 by vasalome     #+#   ##    ##    #+#        #
-#    Updated: 2018/12/18 11:03:15 by lnieto      ###    #+. /#+    ###.fr      #
+#    Updated: 2018/12/18 18:02:27 by vasalome    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -29,8 +29,14 @@ OBJ_DIR		=	./objs_fdf/
 INC_DIR		=	./includes_fdf/
 
 #	Sources:
-SRCS		=	main4.c
-#SRCS		+=	ft_
+SRCS		=	main_fdf.c
+SRCS		+=	ft_fdf_calc.c
+SRCS		+=	ft_fdf_draw.c
+SRCS		+=	ft_fdf_read.c
+SRCS		+=	ft_fdf_getkey.c
+SRCS		+=	ft_fdf_windows.c
+SRCS		+=	ft_fdf_print.c
+SRCS		+=	ft_fdf_plus.c
 
 #	Objects:
 OBJ			=	$(addprefix $(OBJ_DIR),$(SRCS:.c=.o))
