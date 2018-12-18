@@ -347,10 +347,10 @@ int     main(int ac, char **av)
 		half_width = 1500 / 2;
 		half_height = 1500 / 2;
 
-		x_screen = (((dx - (dz / sqrt(2)))));
+		/*x_screen = (((dx - (dz / sqrt(2)))));
 		y_screen = (((dx + 2 * dy + dz) / sqrt(6) + half_height));
 		x2_screen = (((dx2 - (dz2 / sqrt(2)))));
-		y2_screen = (((dx2 + 2 * dy2 + dz2) / sqrt(6) + half_height));
+		y2_screen = (((dx2 + 2 * dy2 + dz2) / sqrt(6) + half_height));*/
 		//printf("%d\n\n", coord[k].y);
 		if (coord[k].y <= -300)
 			color = 0xffffff;
@@ -360,10 +360,10 @@ int     main(int ac, char **av)
 			color = 0x0000ff;
 		else
 			color = 0x8b00;
-		/*x_screen = (dx + (256 / dz) + half_width);
-		y_screen = (dy + (256 / dz) + half_width);
-		x2_screen = (dx2 + (256 / dz2) + half_width);
-		y2_screen = (dy2 + (256 / dz2) + half_width);*/
+		x_screen = (dx + (256 / (dz + 1)) + half_width);
+		y_screen = (dy + (256 / (dz + 1)) + half_width);
+		x2_screen = (dx2 + (256 / (dz2 + 1)) + half_width);
+		y2_screen = (dy2 + (256 / (dz2 + 1)) + half_width);
 
 		//printf("%d %d %d %d\n", x_screen, y_screen, x2_screen, y2_screen);
         //print_pixel(x_screen, y_screen, x2_screen, y2_screen);

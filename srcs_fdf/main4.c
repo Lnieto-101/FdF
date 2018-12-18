@@ -6,7 +6,7 @@
 /*   By: lnieto <lnieto@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/14 14:01:54 by lnieto       #+#   ##    ##    #+#       */
-/*   Updated: 2018/12/15 15:46:19 by lnieto      ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/12/18 14:07:31 by lnieto      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -50,6 +50,8 @@ typedef	struct	s_vars
 	int		zoom;
 	int		high;
 	int		k;
+	int		proj;
+	int		rotate;
 }				vars;
 
 int		draw_image(vars *all);
@@ -66,6 +68,58 @@ int		red_cross(int key)
 	return (0);
 }
 
+void	make_help(vars *all)
+{
+	int		y;
+	int		x;
+
+	y = 0;
+	while (y <= 1250)
+	{
+		x = 0;
+		while (x <= 1250)
+		{
+			if (y >= 1075 && x <= 400)
+				mlx_pixel_put(all->mlx_ptr, all->win_ptr, x, y, 0x8d8d8d);
+			x++;
+		}
+		y++;
+	}
+	mlx_string_put(all->mlx_ptr, all->win_ptr, 10, 1100, 0xffffff, "press arrow to move camera");
+	mlx_string_put(all->mlx_ptr, all->win_ptr, 10, 1150, 0xffffff, "press '+' or '-' for zoom");
+	mlx_string_put(all->mlx_ptr, all->win_ptr, 10, 1200, 0xffffff, "press '*' or '/' for change Z value");
+}
+
+void	make_bg2(vars *all)
+{
+	int		y;
+	int		x;
+
+	y = 0;
+	while (y <= 1250)
+	{
+		x = 0;
+		while (x <= 1250)
+		{
+			mlx_pixel_put(all->mlx_ptr, all->win_ptr, x, y, 0xbababa);
+			x++;
+		}
+		y++;
+	}
+}
+
+void	make_bg(vars *all)
+{
+	int		y;
+
+	y = 0;
+	while (y < 100000000)
+	{
+		all->img_string[y] = (char)255;
+		y++;
+	}
+}
+
 int		make_windows(vars *all)
 {
 	int		x;
@@ -77,15 +131,16 @@ int		make_windows(vars *all)
 		x = 0;
 		while (x <= 1250)
 		{
-			if (y <= 150 || y >= 1200)
-				mlx_pixel_put(all->mlx_ptr, all->win_ptr, x, y, 0x525252);
-			else if (x <= 20 || x >= 1230)
-				mlx_pixel_put(all->mlx_ptr, all->win_ptr, x, y, 0x525252);
+			if (y <= 120)
+				mlx_pixel_put(all->mlx_ptr, all->win_ptr, x, y, 0x940202);
+			else if (y <= 122)
+				mlx_pixel_put(all->mlx_ptr, all->win_ptr, x, y, 0x810000);
 			x++;
 		}
 		y++;
 	}
-	mlx_string_put(all->mlx_ptr, all->win_ptr, 525, 60, 0xffffff, "FdF Lnieto/Vasalome");
+	make_help(all);
+	mlx_string_put(all->mlx_ptr, all->win_ptr, 525, 50, 0xffffff, "FdF Lnieto/Vasalome");
 	return (0);
 }  
 
@@ -101,6 +156,7 @@ int		move_img(int dir, vars *all)
 	else if (dir == 126)
 		all->img_pos_y += 10;
 	//printf("x = %d\ny = %d\n\n", all->img_pos_x, all->img_pos_y);
+	make_bg2(all);
 	mlx_put_image_to_window(all->mlx_ptr, all->win_ptr, all->img_ptr, all->img_pos_x, all->img_pos_y);
 	make_windows(all);
 	return (0);
@@ -130,18 +186,41 @@ int		get_key(int keycode, vars *all)
 		draw_image(all2);
 		move_img(0, all2);
 	}
-	else if (keycode == 78 && all2->zoom > 1)
+	else if (keycode == 78)
 	{
 		all2->zoom -= 1;
 		draw_image(all2);
 		move_img(0, all2);
 	}
-	else if (keycode == 69/* && all2->zoom < 15*/)
+	else if (keycode == 69)
 	{
 		all2->zoom += 1;
 		draw_image(all2);
 		move_img(0, all2);
 	}
+	else if (keycode == 35)
+	{
+		all2->zoom = 1;
+		if (all2->proj == 1)
+			all2->proj = 2;
+		else
+			all2->proj = 1;
+		draw_image(all2);
+		move_img(0, all2);
+	}
+	else if (keycode == 4)
+	{
+		all2->rotate += 2;
+		draw_image(all2);
+		move_img(0, all2);
+	}
+	else if (keycode == 5)
+	{
+		all2->rotate -= 2;
+		draw_image(all2);
+		move_img(0, all2);
+	}
+	printf("key = %d\n", keycode);
 	return (0);
 }
 
@@ -235,9 +314,14 @@ int		print_pixel(vars *all)
 			while (all->y1 >= all->y2)
 			{
 				ok = 0;
-				while (ok != 2 && (4 * all->x1) < 20000)
-					all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)(255 - all->y[all->index] * 2);
-				// mlx_pixel_put(all->mlx_ptr, all->win_ptr, all->x1, all->y1, 0xffffff);
+				while (ok != 4 && (4 * all->x1) < 20000 && (all->y1 * 20000) > 0 && (all->y1 * 20000) < 100000000)
+				{
+					if (ok < 2)
+						all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)(255 - all->y[all->index] * 2);
+					else
+						all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)0;
+				}
+				//mlx_pixel_put(all->mlx_ptr, all->win_ptr, all->x1, all->y1, 0xffffff);
 				all->y1 = all->y1 - 1;
 				if ((e = e - dy) >= 0)
 				{
@@ -254,8 +338,13 @@ int		print_pixel(vars *all)
 			while (all->x1 >= all->x2)
 			{
 				ok = 0;
-				while (ok != 2 && (4 * all->x1) < 20000)
-					all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)(255 - all->y[all->index] * 2);
+				while (ok != 4 && (4 * all->x1) < 20000 && (all->y1 * 20000) > 0 && (all->y1 * 20000) < 100000000)
+				{
+					if (ok < 2)
+						all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)(255 - all->y[all->index] * 2);
+					else
+						all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)0;
+				}
 				//mlx_pixel_put(all->mlx_ptr, all->win_ptr, all->x1, all->y1, 0xffffff);
 				all->x1 = all->x1 - 1;
 				if ((e = e - dy) >= 0)
@@ -276,9 +365,14 @@ int		print_pixel(vars *all)
 			while (all->y1 <= all->y2)
 			{
 				ok = 0;
-				while (ok != 2 && (4 * all->x1) < 20000 && all->y1 * 20000 < 100000000)
-					all->img_string[((0 + 4 * all->x1) + (4 * 5000) * all->y1) + ok++] = (char)(255 - all->y[all->index] * 2);
-				mlx_pixel_put(all->mlx_ptr, all->win_ptr, all->x1, all->y1, 0xffffff);
+				while (ok != 4 && (4 * all->x1) < 20000 && (all->y1 * 20000) > 0 && (all->y1 * 20000) < 100000000)
+				{
+					if (ok < 2)
+						all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)(255 - all->y[all->index] * 2);
+					else
+						all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)0;
+				}
+				//mlx_pixel_put(all->mlx_ptr, all->win_ptr, all->x1, all->y1, 0xffffff);
 				all->y1 += 1;
 				if ((e = e - dy) <= 0)
 				{
@@ -295,9 +389,14 @@ int		print_pixel(vars *all)
 			while (all->x1 <= all->x2)
 			{
 				ok = 0;
-				while (ok != 2 && (4 * all->x1) < 20000 && all->y1 * 20000 < 100000000)
-					all->img_string[((0 + 4 * all->x1) + (4 * 5000) * all->y1) + ok++] = (char)(255 - all->y[all->index] * 2);
-				mlx_pixel_put(all->mlx_ptr, all->win_ptr, all->x1, all->y1, 0xffffff);
+				while (ok != 4 && (4 * all->x1) < 20000 && (all->y1 * 20000) > 0 && (all->y1 * 20000) < 100000000)
+				{
+					if (ok < 2)
+						all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)(255 - all->y[all->index] * 2);
+					else
+						all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)0;
+				}
+				//mlx_pixel_put(all->mlx_ptr, all->win_ptr, all->x1, all->y1, 0xffffff);
 				all->x1 += 1;
 				if ((e = e - dy) <= 0)
 				{
@@ -317,8 +416,13 @@ int		print_pixel(vars *all)
 			while (all->y2 >= all->y1)
 			{
 				ok = 0;
-				while (ok != 2 && (4 * all->x1) < 20000)
-					all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)(255 - all->y[all->index] * 2);
+				while (ok != 4 && (4 * all->x1) < 20000 && (all->y1 * 20000) > 0 && (all->y1 * 20000) < 100000000)
+				{
+					if (ok < 2)
+						all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)(255 - all->y[all->index] * 2);
+					else
+						all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)0;
+				}
 				//mlx_pixel_put(all->mlx_ptr, all->win_ptr, all->x1, all->y1, 0xffffff);
 				all->y1 += 1;
 				if ((e = e - dy) <= 0)
@@ -336,8 +440,13 @@ int		print_pixel(vars *all)
 			while (all->x1 >= all->x2)
 			{
 				ok = 0;
-				while (ok != 2 && (4 * all->x1) < 20000)
-					all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)(255 - all->y[all->index] * 2);
+				while (ok != 4 && (4 * all->x1) < 20000 && (all->y1 * 20000) > 0 && (all->y1 * 20000) < 100000000)
+				{
+					if (ok < 2)
+						all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)(255 - all->y[all->index] * 2);
+					else
+						all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)0;
+				}
 				//mlx_pixel_put(all->mlx_ptr, all->win_ptr, all->x1, all->y1, 0xffffff);
 				all->x1 = all->x1 - 1;
 				if ((e = e - dy) <= 0)
@@ -358,8 +467,13 @@ int		print_pixel(vars *all)
 			while (all->y1 >= all->y2)
 			{
 				ok = 0;
-				while (ok != 2 && (4 * all->x1) < 20000)
-					all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)(255 - all->y[all->index] * 2);
+				while (ok != 4 && (4 * all->x1) < 20000 && (all->y1 * 20000) > 0 && (all->y1 * 20000) < 100000000)
+				{
+					if (ok < 2)
+						all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)(255 - all->y[all->index] * 2);
+					else
+						all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)0;
+				}
 				//mlx_pixel_put(all->mlx_ptr, all->win_ptr, all->x1, all->y1, 0xffffff);
 				all->y1 -= 1;
 				if ((e = e - dy) <= 0)
@@ -377,9 +491,14 @@ int		print_pixel(vars *all)
 			while (all->x1 <= all->x2)
 			{
 				ok = 0;
-				while (ok != 2 && (4 * all->x1) < 20000)
-					all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)(255 - all->y[all->index] * 2);
-				//mlx_pixel_put(all->mlx_ptr, all->win_ptr, all->x1, all->y1, 0xffffff);
+				while (ok != 4 && (4 * all->x1) < 20000 && (all->y1 * 20000) > 0 && (all->y1 * 20000) < 100000000)
+				{
+					if (ok < 2)
+						all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)(255 - all->y[all->index] * 2);
+					else
+						all->img_string[((0 + 4 * all->x1) + 4 * 5000 * all->y1) + ok++] = (char)0;
+				}
+				mlx_pixel_put(all->mlx_ptr, all->win_ptr, all->x1, all->y1, 0xffffff);
 				all->x1 = all->x1 + 1;
 				if ((e = e - dy) >= 0)
 				{
@@ -392,19 +511,29 @@ int		print_pixel(vars *all)
 	return (0);
 }
 
-int		calc_x(int x, int z, int zoom)
+int		calc_x(int x, int z, int y, vars *all)
 {
 	int		dx;
 	int		dz;
+	int		dy;
 	int		x1;
 
 	dx = x;
 	dz = z;
-	x1 = (dx - (dz / sqrt(2))) * zoom;
-	return (x1 + 625);
+	if (dz <= 0 && all->proj != 1)
+		dz = 1;
+	if (all->proj != 1)
+	{
+		x1 = (64 + ((dx * 64) / (dz + 2.5))) * all->zoom;
+	}
+	else
+	{
+		x1 = (dx - (dz / sqrt(2))) * all->zoom;
+	}
+	return (x1);
 }
 
-int		calc_y(int y, int z, int x, int zoom, int high)
+int		calc_y(int y, int z, int x, vars *all)
 {
 	int		dy;
 	int		dz;
@@ -412,9 +541,20 @@ int		calc_y(int y, int z, int x, int zoom, int high)
 	int		y1;
 
 	dx = x;
-	dy = y / high;
+	dy = y / all->high;
 	dz = z;
-	y1 = ((dx + 2 * dy + dz) / sqrt(6)) * zoom;
+	if (dz <= 0 && all->proj != 1)
+		dz = 1;	
+	if (all->proj != 1)
+	{
+		dx = ((cos(all->rotate) * y) - (sin(all->rotate) * z));
+		dz = (-(sin(all->rotate) * y) + (cos(all->rotate) * z));
+		y1 = (64 + ((dy * 64) / (dz + 2.5))) * all->zoom;
+	}
+	else
+	{
+		y1 = ((dx + 2 * dy + dz) / sqrt(6)) * all->zoom;
+	}
 	return (y1 + 625);
 }
 
@@ -425,23 +565,23 @@ int		calc_point(vars *all)
 
 	if (all->index >= all->max_p)
 		return (0);
-	all->x1 = calc_x(all->x[all->index], all->z[all->index], all->zoom);
-	all->y1 = calc_y(all->y[all->index], all->z[all->index], all->x[all->index], all->zoom, all->high);
+	all->x1 = calc_x(all->x[all->index], all->z[all->index], all->y[all->index], all);
+	all->y1 = calc_y(all->y[all->index], all->z[all->index], all->x[all->index], all);
 	x1 = all->x1;
 	y1 = all->y1;
 	//printf("%d %d\n\n", all->x1, all->y1);
 	if (all->index < (all->k - 1) || all->index < all->len_line - 1)
 	{
-		all->x2 = calc_x(all->x[all->index + 1], all->z[all->index + 1], all->zoom);
-		all->y2 = calc_y(all->y[all->index + 1], all->z[all->index + 1], all->x[all->index + 1], all->zoom, all->high);
+		all->x2 = calc_x(all->x[all->index + 1], all->z[all->index + 1], all->y[all->index + 1], all);
+		all->y2 = calc_y(all->y[all->index + 1], all->z[all->index + 1], all->x[all->index + 1], all);
 		print_pixel(all);
 	} 
 	if (all->index + all->len_line <= all->max_p)
 	{
 		all->x1 = x1;
 		all->y1 = y1;
-		all->x2 = calc_x(all->x[all->index + all->len_line], all->z[all->index + all->len_line], all->zoom);
-		all->y2 = calc_y(all->y[all->index + all->len_line], all->z[all->index + all->len_line], all->x[all->index + all->len_line], all->zoom, all->high);
+		all->x2 = calc_x(all->x[all->index + all->len_line], all->z[all->index + all->len_line], all->y[all->index + all->len_line], all);
+		all->y2 = calc_y(all->y[all->index + all->len_line], all->z[all->index + all->len_line], all->x[all->index + all->len_line], all);
 		print_pixel(all);
 	}
 	if (all->index >= all->k - 1)
@@ -485,11 +625,13 @@ int		draw_image(vars *all)
 	all->k = all->len_line;
 	read_map(all);
 	all->img_string = mlx_get_data_addr(all->img_ptr, &all->bits, &all->size_line, &all->endian);
+	make_bg(all);
 	while (k++ < all->max_p)
 	{
 		//printf("k = %d\n max_p = %d\n\n", k, all->max_p);
 		draw_line(all);
 	}
+	make_bg2(all);
 	mlx_put_image_to_window(all->mlx_ptr, all->win_ptr, all->img_ptr, 0, 0);
 	make_windows(all);
 	return (0);
@@ -503,6 +645,8 @@ int		main(int ac, char **av)
 		return (false_args());
 	all.img_pos_x = 0;
 	all.img_pos_y = 0;
+	all.rotate = 0;
+	all.proj = 1;
 	all.zoom = 1;
 	all.high = 1;
 	all.map_name = av[1];
