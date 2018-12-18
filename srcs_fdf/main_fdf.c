@@ -6,7 +6,7 @@
 /*   By: vasalome <vasalome@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/12/18 17:11:34 by vasalome     #+#   ##    ##    #+#       */
-/*   Updated: 2018/12/18 17:16:23 by vasalome    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/12/18 19:01:15 by vasalome    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -15,7 +15,7 @@
 
 int		main(int ac, char **av)
 {
-	vars	all;
+	t_vars	all;
 
 	if (ac != 2)
 		return (false_args());
